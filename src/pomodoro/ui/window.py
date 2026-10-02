@@ -273,19 +273,17 @@ class PomodoroWindow(QWidget):
             if isinstance(watched, (QPushButton, QLineEdit, QCheckBox, QSpinBox)):
                 return False
 
-            mouse_event = cast(QMouseEvent, event)
-            if mouse_event.button() == Qt.MouseButton.LeftButton:
+            if isinstance(event, QMouseEvent) and event.button() == Qt.MouseButton.LeftButton:
                 # 1. Native Wayland / X11 Compositor Grab (Wayland Protocol Compliant)
                 wh = self.windowHandle()
                 if wh is not None and wh.startSystemMove():
                     return True
 
                 # 2. Fallback to manual delta move (for standard X11)
-                self._drag_pos = mouse_event.globalPosition().toPoint() - self.frameGeometry().topLeft()
+                self._drag_pos = event.globalPosition().toPoint() - self.frameGeometry().topLeft()
         elif event.type() == QEvent.Type.MouseMove:
-            mouse_event = cast(QMouseEvent, event)
-            if mouse_event.buttons() == Qt.MouseButton.LeftButton and not self._drag_pos.isNull():
-                self.move(mouse_event.globalPosition().toPoint() - self._drag_pos)
+            if isinstance(event, QMouseEvent) and bool(event.buttons() & Qt.MouseButton.LeftButton) and not self._drag_pos.isNull():
+                self.move(event.globalPosition().toPoint() - self._drag_pos)
                 return True
         elif event.type() == QEvent.Type.MouseButtonRelease:
             self._drag_pos = QPoint()

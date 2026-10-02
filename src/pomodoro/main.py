@@ -81,7 +81,7 @@ def main() -> None:
     app = QApplication(sys.argv)
     app.setApplicationName("Pomodoro")
     app.setApplicationDisplayName("Pomodoro Focus")
-    app.setDesktopFileName("pomodoro.desktop")
+    app.setDesktopFileName("pomodoro")
     # Keep app running in GNOME Topbar tray when window is closed/hidden
     app.setQuitOnLastWindowClosed(False)
 
